@@ -554,15 +554,15 @@
             elements.team1ScoreInput.disabled = false;
             elements.team2ScoreInput.disabled = false;
         }
-    </script>
- if ('serviceWorker' in navigator) {
+   if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-                console.log('تم تسجيل عامل الخدمة بنجاح: ', registration.scope);
+                console.log('[تم تسجيل عامل الخدمة بنجاح]', registration.scope);
             }, function(err) {
-                console.log('فشل تسجيل عامل الخدمة: ', err);
+                console.log('[فشل تسجيل عامل الخدمة]', err);
             });
         });
     }
+</script>
 </body>
 </html>
