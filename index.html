@@ -27,7 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px; /* Reduced padding for mobile */
             box-sizing: border-box;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(74, 107, 255, 0.1) 0%, transparent 20%),
@@ -39,19 +39,19 @@
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 25px;
+            padding: 20px; /* Reduced padding */
             width: 100%;
             max-width: 600px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced margin */
         }
 
         h1 {
             color: var(--text-accent);
             text-align: center;
-            margin: 0 0 20px;
-            font-size: 2.2rem;
+            margin: 0 0 15px; /* Reduced margin */
+            font-size: 1.8rem; /* Smaller font size */
             background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -59,21 +59,21 @@
 
         .team-section {
             display: flex;
-            justify-content: space-around; /* Changed to space-around for better distribution */
-            gap: 15px;
-            margin-bottom: 20px;
+            justify-content: space-around;
+            gap: 10px; /* Reduced gap */
+            margin-bottom: 15px; /* Reduced margin */
         }
 
         .team-card {
             flex: 1;
-            padding: 15px;
+            padding: 10px; /* Reduced padding */
             border-radius: 12px;
             background: rgba(30, 30, 60, 0.6);
             position: relative;
             overflow: hidden;
-            display: flex; /* Added for inner alignment */
-            flex-direction: column; /* Added for inner alignment */
-            align-items: center; /* Added for inner alignment */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
         }
 
@@ -83,7 +83,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px; /* Smaller line */
         }
 
         .team-card.team1::after {
@@ -95,8 +95,8 @@
         }
 
         .team-card h2 {
-            margin: 0 0 15px;
-            font-size: 1.3rem;
+            margin: 0 0 10px; /* Reduced margin */
+            font-size: 1.1rem; /* Smaller font size */
             text-align: center;
         }
 
@@ -109,29 +109,29 @@
         }
 
         .input-group {
-            display: flex; /* To put input and label next to each other */
-            flex-direction: column; /* Stack label and input */
-            align-items: center; /* Center input and label */
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px; /* Reduced margin */
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            margin-bottom: 3px; /* Reduced margin */
+            font-size: 0.8rem; /* Smaller font size */
         }
 
         input[type="number"] {
-            width: 70px; /* Smaller width for circular input */
-            height: 70px; /* Equal height for circular input */
-            padding: 0; /* Remove padding */
+            width: 60px; /* Smaller width */
+            height: 60px; /* Smaller height */
+            padding: 0;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%; /* Make it circular */
+            border-radius: 50%;
             background: rgba(0, 0, 0, 0.3);
             color: white;
-            font-size: 1.5rem; /* Larger font for readability */
+            font-size: 1.3rem; /* Adjusted font size */
             text-align: center;
-            -moz-appearance: textfield; /* Remove Firefox number input arrows */
+            -moz-appearance: textfield;
         }
 
         input[type="number"]::-webkit-outer-spin-button,
@@ -143,34 +143,34 @@
         .total-display {
             text-align: center;
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 10px;
-            display: flex; /* Arrange "Total" text and span next to each other */
+            font-size: 1rem; /* Smaller font size */
+            margin-top: 8px; /* Reduced margin */
+            display: flex;
             gap: 5px;
             justify-content: center;
         }
         .total-display span {
-            font-size: 1.5rem; /* Larger font for total scores */
+            font-size: 1.2rem; /* Adjusted font size */
             font-weight: bold;
         }
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 8px; /* Reduced gap */
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px; /* Reduced margin */
             flex-wrap: wrap;
         }
 
         button {
-            padding: 12px 20px;
+            padding: 10px 15px; /* Reduced padding */
             border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1rem;
-            min-width: 120px;
+            font-size: 0.9rem; /* Smaller font size */
+            min-width: 100px; /* Adjusted min-width */
         }
 
         .calculate-btn {
@@ -202,47 +202,48 @@
         .results-container {
             width: 100%;
             max-width: 600px;
-            margin-top: 20px;
+            margin-top: 15px; /* Reduced margin */
         }
 
         .results-title {
             color: var(--text-accent);
             text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            margin-bottom: 10px; /* Reduced margin */
+            font-size: 1.3rem; /* Smaller font size */
         }
 
         .rounds-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px; /* Reduced gap */
         }
 
         .round-card {
             background: var(--card-bg);
             border-radius: 10px;
-            padding: 15px;
+            padding: 12px; /* Reduced padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--primary-color);
-            opacity: 1; /* Initial state for animation */
+            border-left: 3px solid var(--primary-color); /* Smaller border */
+            opacity: 1;
             transition: opacity 0.3s ease-out;
+            font-size: 0.9rem; /* Smaller font size */
         }
         .round-card.faded {
             opacity: 0;
         }
 
-
         .round-number {
             font-weight: bold;
             color: var(--text-accent);
-            min-width: 70px;
+            min-width: 60px; /* Adjusted min-width */
+            font-size: 0.9rem; /* Smaller font size */
         }
 
         .round-scores {
             display: flex;
-            gap: 20px;
+            gap: 15px; /* Reduced gap */
             flex: 1;
             justify-content: space-around;
         }
@@ -264,16 +265,17 @@
         .star {
             color: var(--star-color);
             font-weight: bold;
+            font-size: 0.8rem; /* Smaller star font size */
         }
 
         .game-over {
             text-align: center;
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 15px; /* Reduced margin */
+            padding: 12px; /* Reduced padding */
             background: rgba(0, 200, 150, 0.2);
             border-radius: 10px;
             border: 1px solid var(--secondary-color);
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* Smaller font size */
             display: none;
         }
 
@@ -284,17 +286,18 @@
         /* Notification styles */
         .notification {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px; /* Adjusted position */
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px; /* Reduced padding */
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
+            font-size: 0.9rem; /* Smaller font size */
         }
         .notification.show {
             opacity: 1;
@@ -316,25 +319,36 @@
             }
 
             .team-card {
-                flex-direction: row; /* Make input and total side-by-side in mobile */
+                flex-direction: row;
                 justify-content: space-around;
                 align-items: center;
             }
 
             .input-group, .total-display {
                 flex-direction: row;
-                gap: 10px;
+                gap: 8px; /* Reduced gap */
                 margin-bottom: 0;
             }
 
             .total-display span {
-                font-size: 1.2rem;
+                font-size: 1.1rem; /* Adjusted font size */
             }
 
             input[type="number"] {
-                width: 60px;
-                height: 60px;
-                font-size: 1.2rem;
+                width: 50px; /* Even smaller for mobile */
+                height: 50px; /* Even smaller for mobile */
+                font-size: 1.1rem; /* Adjusted font size */
+            }
+
+            .round-card {
+                font-size: 0.85rem; /* Smaller font size for round details */
+                padding: 10px;
+            }
+            .round-number {
+                min-width: 50px;
+            }
+            .star {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -366,7 +380,7 @@
         
         <div class="controls">
             <button class="calculate-btn" onclick="calculateRound()">احسب الجولة</button>
-            <button class="undo-btn" id="undo-button" onclick="undoLastRound()" disabled>تراجع</button>
+            <button class="undo-btn" id="undo-button" onclick="undoLastRoundConfirm()" disabled>تراجع</button>
             <button class="new-match-btn" onclick="startNewMatchConfirm()">شوط جديد</button>
         </div>
     </div>
@@ -440,15 +454,13 @@
                 return;
             }
 
-            // --- التعديل الجديد: منع صفرين في نفس الجولة ---
             const isTeam1Zero = team1Input === '0';
             const isTeam2Zero = team2Input === '0';
 
             if (isTeam1Zero && isTeam2Zero) {
                 showNotification("لا يمكن للفريقين الحصول على 'نجمة' (صفر) في نفس الجولة.");
-                return; // إيقاف تنفيذ الدالة
+                return;
             }
-            // --- نهاية التعديل الجديد ---
             
             // Save current state for undo
             saveCurrentStateForUndo();
@@ -458,7 +470,6 @@
             // Process team 2 score
             const team2Result = processTeamScore('team2', team2Input);
             
-            // If game ended due to 3 consecutive stars or 4 total stars, no need to check totals
             if (!gameState.gameActive) {
                 updateTotalsDisplay();
                 displayRoundResults();
@@ -485,7 +496,7 @@
             
             // Update UI
             updateTotalsDisplay();
-            displayRoundResults(); // This will re-render all rounds
+            displayRoundResults();
             
             // Clear inputs
             elements.team1ScoreInput.value = '';
@@ -558,7 +569,6 @@
         }
         
         // End the game
-        // Added 'reason' and 'losingTeam' parameters
         function endGame(winningTeam, reason, losingTeam = null) {
             gameState.gameActive = false;
             elements.gameOverMsg.style.display = 'block';
@@ -574,7 +584,7 @@
                 const teamName = losingTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
                 reasonText = `بسبب حصول ${teamName} على 4 نجمات إجمالاً.`;
             }
-            elements.gameOverReason.textContent = reasonText; // Display the reason
+            elements.gameOverReason.textContent = reasonText;
             
             disableInputs();
             showNotification(`انتهت اللعبة! الفائز هو ${winningTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني'}. ${reasonText}`);
@@ -582,41 +592,42 @@
         
         // Save current game state before a new round is calculated
         function saveCurrentStateForUndo() {
-            // Deep copy the current game state
             const stateToSave = JSON.parse(JSON.stringify(gameState));
             gameState.roundHistory.push(stateToSave);
         }
         
-        // Undo last round
-        function undoLastRound() {
+        // Confirm before undoing last round
+        function undoLastRoundConfirm() {
             if (gameState.roundHistory.length === 0) {
                 elements.undoButton.disabled = true;
+                showNotification("لا توجد جولات للتراجع عنها.");
                 return;
             }
-            
-            // Pop the last saved state
+            if (confirm("هل أنت متأكد أنك تريد التراجع عن الجولة الأخيرة؟")) {
+                undoLastRound();
+            }
+        }
+
+        // Undo last round
+        function undoLastRound() {
             const previousState = gameState.roundHistory.pop();
             
-            // Restore game state
             Object.assign(gameState, previousState);
             
-            // Update UI
             updateTotalsDisplay();
             displayRoundResults();
             
-            // Disable undo button if no more history
             if (gameState.roundHistory.length === 0) {
                 elements.undoButton.disabled = true;
             }
             
-            // Re-enable game if it was over
             if (!gameState.gameActive) {
                 gameState.gameActive = true;
                 elements.gameOverMsg.style.display = 'none';
-                elements.gameOverReason.textContent = ''; // Clear the reason
+                elements.gameOverReason.textContent = '';
                 enableInputs();
-                showNotification("تم التراجع عن الجولة الأخيرة.");
             }
+            showNotification("تم التراجع عن الجولة الأخيرة.");
         }
         
         // Confirm before starting a new match
@@ -636,14 +647,14 @@
             gameState.team1.consecutiveZeros = 0;
             gameState.team2.consecutiveZeros = 0;
             gameState.roundNumber = 1;
-            gameState.roundHistory = []; // Clear history
+            gameState.roundHistory = [];
             gameState.gameActive = true;
             
             // Update UI
             updateTotalsDisplay();
-            elements.roundResults.innerHTML = ''; // Clear displayed rounds
+            elements.roundResults.innerHTML = '';
             elements.gameOverMsg.style.display = 'none';
-            elements.gameOverReason.textContent = ''; // Clear the reason
+            elements.gameOverReason.textContent = '';
             elements.undoButton.disabled = true;
             enableInputs();
             
@@ -661,7 +672,7 @@
             elements.roundResults.innerHTML = '';
             
             gameState.roundHistory.forEach(savedState => {
-                if (savedState.roundDetails) { // Only render rounds that have details saved
+                if (savedState.roundDetails) {
                     const round = savedState.roundDetails;
                     const roundElement = document.createElement('div');
                     roundElement.className = 'round-card';
@@ -681,7 +692,6 @@
                     elements.roundResults.appendChild(roundElement);
                 }
             });
-            // Scroll to bottom to show latest round
             elements.roundResults.scrollTop = elements.roundResults.scrollHeight;
         }
         
