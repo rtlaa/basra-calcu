@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة لعبة البصرة - تصميم عصري</title>
+<link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #00c896;
+            --dark-bg: #0a0a1a;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --text-light: #ffffff;
+            --text-accent: #66fcf1;
+            --star-color: #ffcc00;
+            --team1-color: #ff6b6b;
+            --team2-color: #48dbfb;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 107, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 200, 150, 0.1) 0%, transparent 20%),
+                url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23ffffff' fill-opacity='0.2'/%3E%3C/svg%3E");
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--text-accent);
+            text-align: center;
+            margin: 0 0 20px;
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .team-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .team-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(30, 30, 60, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .team-card.team1::after {
+            background: var(--team1-color);
+        }
+
+        .team-card.team2::after {
+            background: var(--team2-color);
+        }
+
+        .team-card h2 {
+            margin: 0 0 15px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .team-card.team1 h2 {
+            color: var(--team1-color);
+        }
+
+        .team-card.team2 h2 {
+            color: var(--team2-color);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .total-display {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, var(--primary-color), #6c5ce7);
+            color: white;
+        }
+
+        .undo-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .new-match-btn {
+            background: linear-gradient(135deg, var(--secondary-color), #00b894);
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .results-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .results-title {
+            color: var(--text-accent);
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .rounds-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .round-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .round-number {
+            font-weight: bold;
+            color: var(--text-accent);
+            min-width: 70px;
+        }
+
+        .round-scores {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            justify-content: space-around;
+        }
+
+        .team-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team1-score {
+            color: var(--team1-color);
+        }
+
+        .team2-score {
+            color: var(--team2-color);
+        }
+
+        .star {
+            color: var(--star-color);
+            font-weight: bold;
+        }
+
+        .game-over {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 200, 150, 0.2);
+            border-radius: 10px;
+            border: 1px solid var(--secondary-color);
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .winning-team {
+            font-weight: bold;
+            color: var(--star-color);
+        }
+
+        @media (max-width: 600px) {
+            .team-section {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>حاسبة لعبة البصرة</h1>
+        
+        <div class="team-section">
+            <div class="team-card team1">
+                <h2>الفريق الأول</h2>
+                <div class="input-group">
+                    <label for="team1-score">نقاط الجولة:</label>
+                    <input type="number" id="team1-score" placeholder="أدخل النقاط">
+                </div>
+                <div class="total-display">المجموع: <span id="team1-total">0</span></div>
+            </div>
+            
+            <div class="team-card team2">
+                <h2>الفريق الثاني</h2>
+                <div class="input-group">
+                    <label for="team2-score">نقاط الجولة:</label>
+                    <input type="number" id="team2-score" placeholder="أدخل النقاط">
+                </div>
+                <div class="total-display">المجموع: <span id="team2-total">0</span></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="calculate-btn" onclick="calculateRound()">احسب الجولة</button>
+            <button class="undo-btn" id="undo-button" onclick="undoLastRound()" disabled>تراجع</button>
+            <button class="new-match-btn" onclick="startNewMatch()">شوط جديد</button>
+        </div>
+    </div>
+    
+    <div class="results-container">
+        <h2 class="results-title">سجل الأشواط</h2>
+        <div class="rounds-list" id="round-results-container">
+            <!-- Round results will appear here -->
+        </div>
+        <div class="game-over" id="game-over">
+            انتهت اللعبة! الفريق الفائز: <span class="winning-team" id="winning-team"></span>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            team1: {
+                total: 0,
+                zeroCount: 0,
+                consecutiveZeros: 0,
+                lastScore: 0
+            },
+            team2: {
+                total: 0,
+                zeroCount: 0,
+                consecutiveZeros: 0,
+                lastScore: 0
+            },
+            roundNumber: 1,
+            roundHistory: [],
+            gameActive: true
+        };
+
+        // DOM elements
+        const elements = {
+            team1ScoreInput: document.getElementById('team1-score'),
+            team2ScoreInput: document.getElementById('team2-score'),
+            team1Total: document.getElementById('team1-total'),
+            team2Total: document.getElementById('team2-total'),
+            roundResults: document.getElementById('round-results-container'),
+            gameOverMsg: document.getElementById('game-over'),
+            winningTeam: document.getElementById('winning-team'),
+            undoButton: document.getElementById('undo-button')
+        };
+
+        // Calculate round results
+        function calculateRound() {
+            if (!gameState.gameActive) return;
+            
+            const team1Input = elements.team1ScoreInput.value.trim();
+            const team2Input = elements.team2ScoreInput.value.trim();
+            
+            // Validate inputs
+            if (!team1Input && !team2Input) {
+                alert("الرجاء إدخال نقاط لأحد الفريقين على الأقل");
+                return;
+            }
+            
+            // Process team 1 score
+            const team1Result = processTeamScore('team1', team1Input);
+            // Process team 2 score
+            const team2Result = processTeamScore('team2', team2Input);
+            
+            // Check for game over conditions
+            checkGameOver();
+            
+            // Save round data to history
+            saveRoundData(team1Input, team2Input, team1Result, team2Result);
+            
+            // Update UI
+            updateTotalsDisplay();
+            displayRoundResults();
+            
+            // Clear inputs
+            elements.team1ScoreInput.value = '';
+            elements.team2ScoreInput.value = '';
+            
+            // Enable undo button
+            elements.undoButton.disabled = false;
+            
+            // Increment round number
+            gameState.roundNumber++;
+        }
+        
+        // Process score for a single team
+        function processTeamScore(team, input) {
+            const result = {
+                display: '0',
+                pointsToAdd: 0,
+                isStar: false
+            };
+            
+            if (input === '0') {
+                // Star case
+                gameState[team].zeroCount++;
+                gameState[team].consecutiveZeros++;
+                result.display = '<span class="star">نجمة</span>';
+                result.isStar = true;
+                
+                // Check for 3 consecutive stars
+                if (gameState[team].consecutiveZeros === 3) {
+                    alert(`ثلاث نجمات متتالية لل${team === 'team1' ? 'فريق الأول' : 'فريق الثاني'}! انتهى الشوط.`);
+                    startNewMatch();
+                    return result;
+                }
+                
+                // Check for 3 total stars
+                if (gameState[team].zeroCount === 3) {
+                    gameState[team].total = 0;
+                    alert(`حصل ال${team === 'team1' ? 'فريق الأول' : 'فريق الثاني'} على ثلاث نجمات! تم تصفير نقاطه.`);
+                }
+                
+                // Check for 4 stars (game over)
+                if (gameState[team].zeroCount >= 4) {
+                    endGame(team === 'team1' ? 'team2' : 'team1');
+                    return result;
+                }
+            } else if (input) {
+                // Normal score
+                const score = parseInt(input);
+                gameState[team].total += score;
+                gameState[team].lastScore = score;
+                gameState[team].consecutiveZeros = 0;
+                result.display = score;
+                result.pointsToAdd = score;
+            }
+            
+            return result;
+        }
+        
+        // Check if game should end based on totals
+        function checkGameOver() {
+            if (gameState.team1.total >= 250) {
+                endGame('team1');
+            } else if (gameState.team2.total >= 250) {
+                endGame('team2');
+            }
+        }
+        
+        // End the game
+        function endGame(winningTeam) {
+            gameState.gameActive = false;
+            elements.gameOverMsg.style.display = 'block';
+            elements.winningTeam.textContent = winningTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
+            disableInputs();
+        }
+        
+        // Save round data to history
+        function saveRoundData(team1Input, team2Input, team1Result, team2Result) {
+            gameState.roundHistory.push({
+                round: gameState.roundNumber,
+                team1: {
+                    input: team1Input,
+                    totalBefore: gameState.team1.total - team1Result.pointsToAdd,
+                    result: team1Result
+                },
+                team2: {
+                    input: team2Input,
+                    totalBefore: gameState.team2.total - team2Result.pointsToAdd,
+                    result: team2Result
+                },
+                state: JSON.parse(JSON.stringify(gameState))
+            });
+        }
+        
+        // Undo last round
+        function undoLastRound() {
+            if (gameState.roundHistory.length === 0) return;
+            
+            const lastRound = gameState.roundHistory.pop();
+            
+            // Restore game state
+            Object.assign(gameState, lastRound.state);
+            gameState.roundNumber--;
+            
+            // Update UI
+            updateTotalsDisplay();
+            displayRoundResults();
+            
+            // Disable undo button if no more history
+            if (gameState.roundHistory.length === 0) {
+                elements.undoButton.disabled = true;
+            }
+            
+            // Re-enable game if it was over
+            if (!gameState.gameActive) {
+                gameState.gameActive = true;
+                elements.gameOverMsg.style.display = 'none';
+                enableInputs();
+            }
+        }
+        
+        // Start new match
+        function startNewMatch() {
+            // Reset game state
+            gameState.team1.total = 0;
+            gameState.team2.total = 0;
+            gameState.team1.zeroCount = 0;
+            gameState.team2.zeroCount = 0;
+            gameState.team1.consecutiveZeros = 0;
+            gameState.team2.consecutiveZeros = 0;
+            gameState.roundNumber = 1;
+            gameState.roundHistory = [];
+            gameState.gameActive = true;
+            
+            // Update UI
+            updateTotalsDisplay();
+            elements.roundResults.innerHTML = '';
+            elements.gameOverMsg.style.display = 'none';
+            elements.undoButton.disabled = true;
+            enableInputs();
+            
+            alert("تم بدء شوط جديد!");
+        }
+        
+        // Update totals display
+        function updateTotalsDisplay() {
+            elements.team1Total.textContent = gameState.team1.total;
+            elements.team2Total.textContent = gameState.team2.total;
+        }
+        
+        // Display round results
+        function displayRoundResults() {
+            elements.roundResults.innerHTML = '';
+            
+            gameState.roundHistory.forEach(round => {
+                const roundElement = document.createElement('div');
+                roundElement.className = 'round-card';
+                roundElement.innerHTML = `
+                    <div class="round-number">الشوط ${round.round}</div>
+                    <div class="round-scores">
+                        <div class="team-score team1-score">
+                            <div>الفريق الأول</div>
+                            <div>${round.team1.result.display}</div>
+                        </div>
+                        <div class="team-score team2-score">
+                            <div>الفريق الثاني</div>
+                            <div>${round.team2.result.display}</div>
+                        </div>
+                    </div>
+                `;
+                elements.roundResults.appendChild(roundElement);
+            });
+        }
+        
+        // Disable inputs when game is over
+        function disableInputs() {
+            elements.team1ScoreInput.disabled = true;
+            elements.team2ScoreInput.disabled = true;
+        }
+        
+        // Enable inputs
+        function enableInputs() {
+            elements.team1ScoreInput.disabled = false;
+            elements.team2ScoreInput.disabled = false;
+        }
+    </script>
+ if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                console.log('تم تسجيل عامل الخدمة بنجاح: ', registration.scope);
+            }, function(err) {
+                console.log('فشل تسجيل عامل الخدمة: ', err);
+            });
+        });
+    }
+</body>
+</html>
