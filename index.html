@@ -412,7 +412,8 @@
             },
             roundNumber: 1,
             roundHistory: [], // Stores previous full states
-            gameActive: true
+            gameActive: true,
+            overtimeTarget: 250 // Initial target, will change by +50 in overtime
         };
 
         // DOM elements
@@ -462,41 +463,48 @@
                 return;
             }
             
-            // Save current state for undo
+            // Save current state for undo (before processing scores)
             saveCurrentStateForUndo();
+
+            // Store scores for the current round before processing
+            const currentRoundScores = {
+                team1: team1Input,
+                team2: team2Input
+            };
 
             // Process team 1 score
             const team1Result = processTeamScore('team1', team1Input);
             // Process team 2 score
             const team2Result = processTeamScore('team2', team2Input);
             
+            // Check for game over conditions due to stars (these override score limits)
             if (!gameState.gameActive) {
                 updateTotalsDisplay();
+                // Add the new round to history with details
+                gameState.roundHistory[gameState.roundHistory.length - 1].roundDetails = {
+                    round: gameState.roundNumber,
+                    team1: { input: currentRoundScores.team1, result: team1Result },
+                    team2: { input: currentRoundScores.team2, result: team2Result }
+                };
                 displayRoundResults();
                 elements.team1ScoreInput.value = '';
                 elements.team2ScoreInput.value = '';
                 return;
             }
 
-            // Add the new round to history for display
+            // Check for game over conditions based on totals (including new overtime rules)
+            checkGameOverByScore();
+            
+            // Add the new round to history for display (after all processing)
             gameState.roundHistory[gameState.roundHistory.length - 1].roundDetails = {
                 round: gameState.roundNumber,
-                team1: {
-                    input: team1Input,
-                    result: team1Result
-                },
-                team2: {
-                    input: team2Input,
-                    result: team2Result
-                }
+                team1: { input: currentRoundScores.team1, result: team1Result },
+                team2: { input: currentRoundScores.team2, result: team2Result }
             };
-            
-            // Check for game over conditions based on totals
-            checkGameOver();
             
             // Update UI
             updateTotalsDisplay();
-            displayRoundResults();
+            displayRoundResults(); // This will re-render all rounds
             
             // Clear inputs
             elements.team1ScoreInput.value = '';
@@ -505,8 +513,10 @@
             // Enable undo button
             elements.undoButton.disabled = false;
             
-            // Increment round number
-            gameState.roundNumber++;
+            // Increment round number only if game didn't end
+            if (gameState.gameActive) {
+                gameState.roundNumber++;
+            }
         }
         
         // Process score for a single team
@@ -559,31 +569,86 @@
             return result;
         }
         
-        // Check if game should end based on totals
-        function checkGameOver() {
-            if (gameState.team1.total >= 250) {
-                endGame('team1', 'score_limit');
-            } else if (gameState.team2.total >= 250) {
-                endGame('team2', 'score_limit');
+        // Check if game should end based on totals (with refined overtime rules)
+        function checkGameOverByScore() {
+            const team1Total = gameState.team1.total;
+            const team2Total = gameState.team2.total;
+            const target = gameState.overtimeTarget;
+            const nextTarget = target + 50; // The next target in overtime
+
+            // Scenario 1: One team wins decisively (reaches target AND other team is NOT in the "overtime zone")
+            // A team wins if it hits or exceeds the target, AND the other team is strictly below the target.
+            // Or if both are over the target but one is higher AND the other is not in the same "overtime band"
+            
+            // Check if Team 1 wins definitively
+            if (team1Total >= target && team1Total > team2Total) {
+                // If Team 2 is not even in the current target band (e.g., Team 1 is 250, Team 2 is 240)
+                // OR if Team 1 has passed the *next* threshold (e.g., Team 1 is 300, Team 2 is 290 and target was 250)
+                if (team2Total < target || (team1Total >= nextTarget && team2Total < nextTarget)) {
+                    endGame('team1', 'score_limit');
+                    return true;
+                }
             }
+            
+            // Check if Team 2 wins definitively
+            if (team2Total >= target && team2Total > team1Total) {
+                 if (team1Total < target || (team2Total >= nextTarget && team1Total < nextTarget)) {
+                    endGame('team2', 'score_limit');
+                    return true;
+                 }
+            }
+
+            // Scenario 2: Both teams are in the "overtime zone" (e.g., both 250-299)
+            // This means the game continues and the target increases.
+            if (team1Total >= target && team1Total < nextTarget && 
+                team2Total >= target && team2Total < nextTarget) {
+                
+                gameState.overtimeTarget = nextTarget; // Increase target by 50
+                showNotification(`دخلت اللعبة مرحلة التمديد! الهدف الجديد: ${gameState.overtimeTarget} نقطة.`);
+                return false; // Game continues
+            }
+
+            // Scenario 3: Both teams have surpassed the current "overtime band" (e.g., both 300+)
+            // In this case, the game ends, and the team with the higher score wins.
+            if (team1Total >= nextTarget && team2Total >= nextTarget) {
+                if (team1Total > team2Total) {
+                    endGame('team1', 'score_limit_overtime');
+                } else if (team2Total > team1Total) {
+                    endGame('team2', 'score_limit_overtime');
+                } else {
+                    // Both reached/exceeded the target and are tied.
+                    endGame('draw', 'score_limit_overtime_tie'); 
+                }
+                return true; // Game ends
+            }
+            
+            // If none of the above, game continues (or is already active and below target)
+            return false;
         }
         
         // End the game
         function endGame(winningTeam, reason, losingTeam = null) {
             gameState.gameActive = false;
             elements.gameOverMsg.style.display = 'block';
-            elements.winningTeam.textContent = winningTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
             
             let reasonText = "";
-            if (reason === 'score_limit') {
-                reasonText = `بسبب وصول مجموع نقاطه إلى ${winningTeam === 'team1' ? gameState.team1.total : gameState.team2.total} نقطة أو أكثر.`;
-            } else if (reason === '3_consecutive_stars') {
-                const teamName = losingTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
-                reasonText = `بسبب حصول ${teamName} على 3 نجمات متتالية.`;
-            } else if (reason === '4_total_stars') {
-                const teamName = losingTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
-                reasonText = `بسبب حصول ${teamName} على 4 نجمات إجمالاً.`;
+            if (winningTeam === 'draw') {
+                elements.winningTeam.textContent = "تعادل";
+                reasonText = "انتهت اللعبة بالتعادل في التمديد.";
+            } else {
+                elements.winningTeam.textContent = winningTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
+                if (reason === 'score_limit' || reason === 'score_limit_overtime') {
+                    reasonText = `بسبب وصول مجموع نقاطه إلى ${winningTeam === 'team1' ? gameState.team1.total : gameState.team2.total} نقطة أو أكثر.`;
+                }
+                else if (reason === '3_consecutive_stars') {
+                    const teamName = losingTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
+                    reasonText = `بسبب حصول ${teamName} على 3 نجمات متتالية.`;
+                } else if (reason === '4_total_stars') {
+                    const teamName = losingTeam === 'team1' ? 'الفريق الأول' : 'الفريق الثاني';
+                    reasonText = `بسبب حصول ${teamName} على 4 نجمات إجمالاً.`;
+                }
             }
+            
             elements.gameOverReason.textContent = reasonText;
             
             disableInputs();
@@ -649,6 +714,7 @@
             gameState.roundNumber = 1;
             gameState.roundHistory = [];
             gameState.gameActive = true;
+            gameState.overtimeTarget = 250; // Reset target to initial
             
             // Update UI
             updateTotalsDisplay();
